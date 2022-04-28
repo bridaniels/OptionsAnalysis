@@ -20,7 +20,7 @@
         - `Fx(a) = P(x<=a) = P(x=a = fx(a)` if `c < a` then `Fx(c) = 0`
 - *C* = Call Option Price 
 
-[BlackScholesFormula](data/black_scholes_formula.png)
+![BlackScholesFormula](data/black_scholes_formula.png)
 
 
 

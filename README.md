@@ -1,6 +1,25 @@
 # **Options Trading Analysis Techniques**
 ---
 
+## [Black Scholes](blackScholes)
+---
+### [Black Scholes](blackScholes/blackScholes.ipynb) 
+
+
+
+### [Greeks:](blackScholes/greeks.ipynb)
+> Delta
+
+> Gamma
+
+> Theta
+
+> Vega
+
+> Rho
+
+
+
 
 
 ## [TA Python Library](https://github.com/bukosabino/ta)

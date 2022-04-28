@@ -34,6 +34,13 @@
 
 
 
+# **Level of Underlying**
+---
+- time to expiration of one year
+- no time to expiration 
+- time to expiration of three years 
+
+
 
 
 

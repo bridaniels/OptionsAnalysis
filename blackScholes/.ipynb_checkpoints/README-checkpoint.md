@@ -24,6 +24,12 @@
 
 
 
+# **Implied Volatility**
+---
+- expected future volatility 
+
+
+
 # **Greeks**
 ---
 - Delta

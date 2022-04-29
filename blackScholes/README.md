@@ -38,10 +38,14 @@
 ---
 - expected future volatility of underlying asset, derived from Black-Scholes formula
 - assumes price of asset follows geometric Brownian Motion 
-    - aka limits to random-walk 
-    - no perferred direction/amount of movement present in random-walk, but overtime will spread evenly within boundaries 
 - 
 
+---
+---
+# **Brownian Motion**
+---
+---
+##### Brownian Motion: 
 
 ---
 ---

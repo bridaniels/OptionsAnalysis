@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import datetime as dt
+import matplotlib.pyplot as plt 
 
 
 
@@ -193,6 +194,9 @@ def get_year_deltas(date_list, day_count=365):
 
 
 
+
+# EXAMPLE Results 
+# MarketEnvironment
 me_gbm = MarketEnvironment('me_gbm', dt.datetime(2020,1,1))
 
 me_gbm.add_constant('initial_value',36)
@@ -202,9 +206,11 @@ me_gbm.add_constant('currency', 'EUR')
 me_gbm.add_constant('frequency', 'M')
 me_gbm.add_constant('paths', 10000)
 
+# ConstantShortRate
 csr = ConstantShortRate('csr', 0.05)
 me_gbm.add_curve('discount_curve', csr)
 
+# GeometricBrownian Motion
 gbm = GeometricBrownianMotion('gbm', me_gbm)
 
 gbm.generate_time_grid()
@@ -214,14 +220,18 @@ paths_2 = gbm.get_instrument_values(fixed_seed=False)
 
 
 
+# Plotting
+def plotting(marketE):
+    plt.figure(figsize=(12,6))
+    p1 = plt.plot(gbm.time_grid, paths_1[:,:15], 'b')
+    p2 = plt.plot(gbm.time_grid, paths_2[:,:15], 'r-.')
 
-import matplotlib.pyplot as plt
-plt.figure(figsize=(16,5))
-p1 = plt.plot(gbm.time_grid, paths_1[:,:15], 'b')
-p2 = plt.plot(gbm.time_grid, paths_2[:,:15], 'r-.')
-plt.grid(True)
-l1 = plt.legend([p1[0], p2[0]], ['LowVolatility', 'HighVolatility'], loc=2)
-plt.gca().add_artist(l1)
-plt.title('Geometric Brownian Model',fontsize=15)
-plt.xticks(rotation=30)
-plt.show()
+    plt.grid(True)
+    plt.legend([p1[0],p2[0]],['Low Volatility', 'High Volatility'],loc=2)
+    plt.suptitle("Geometric Brownian Motion",fontsize=15)
+    plt.xticks(rotation=30)
+
+    plt.show()
+
+
+plotting(gbm)

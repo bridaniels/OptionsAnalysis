@@ -1,7 +1,36 @@
 # **Options Trading Analysis Techniques**
 ---
 
+# European Option vs. American Option
+---
+#### European: 
+> - can only be exercised at expiration 
+> - original Black-Scholes equation foundation 
+
+#### American: 
+> - Binary Option: 
+> - can be exercised whenever within contract 
+
+
+
+# Call Option
+---
+---
+
+
+
+
+# Put Option
+---
+---
+
+
+
+
+---
+---
 # [Black Scholes](blackScholes)
+---
 ---
 ### [Black Scholes](blackScholes/blackScholes.ipynb) 
 
@@ -23,9 +52,10 @@
 > - time to expiration of three years 
 
 
-
-
+---
+---
 ## [TA Python Library](https://github.com/bukosabino/ta)
+---
 ---
 ### [Trend Indicators:](ta_library_indicators/trendIndicators.ipynb)
 > - Aroon Indicator 
@@ -63,3 +93,9 @@
 > - Percentage Point Oscillator (PPO)
 > - Percentage Volume Oscillator (PVO)
 
+
+
+
+### References: 
+---
+- [Tokenist: How are Stock Prices Determined?]](https://tokenist.com/investing/how-are-stock-prices-determined/)

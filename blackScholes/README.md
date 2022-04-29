@@ -36,7 +36,11 @@
 
 # **Implied Volatility**
 ---
-- expected future volatility 
+- expected future volatility of underlying asset, derived from Black-Scholes formula
+- assumes price of asset follows geometric Brownian Motion 
+    - aka limits to random-walk 
+    - no perferred direction/amount of movement present in random-walk, but overtime will spread evenly within boundaries 
+- 
 
 
 ---
@@ -88,11 +92,14 @@
 
 ##### University Materials: 
 - [City University of Hong Kong: Black Scholes Equations](https://www.math.cuhk.edu.hk/~rchan/teaching/math4210/chap08.pdf)
+- [University of Chicago: Brownian Motion](https://galton.uchicago.edu/~lalley/Courses/313/BrownianMotionCurrent.pdf)
+- [Berkeley: Brownian Motion](https://www.stat.berkeley.edu/~aldous/205B/bmbook.pdf)
 
 
 ##### Websites: 
 - [Tokenist: Complete Guide to the Black-Scholes Model](https://tokenist.com/investing/black-scholes-model/)
 - [SoFi: The Black-Scholes Model Explained](https://www.sofi.com/learn/content/what-is-the-black-scholes-model/)
+- [Investopedia: How is Implied Volatility Used in the Black-Scholes Formula](https://www.investopedia.com/ask/answers/060115/how-implied-volatility-used-blackscholes-formula.asp)
 
 
 

@@ -144,9 +144,7 @@ class GeometricBrownianMotion(SimulationClass):
                 ran = np.dot(self.cholesky_matrix, rand[:, t, :])
                 ran = ran[self.rn_set]
             dt = (self.time_grid[t] - self.time_grid[t-1]).days/day_count
-            paths[t] = paths[t-1] * np.exp((short_rate - 0.5 * 
-                                    self.volatility**2) * dt + 
-                                    self.volatility*np.sqrt(dt)*ran)
+            paths[t] = paths[t-1] * np.exp((short_rate - 0.5 * self.volatility**2) * dt + self.volatility*np.sqrt(dt)*ran)
         self.instrument_values = paths 
 
 class ConstantShortRate(object):
@@ -195,31 +193,6 @@ def get_year_deltas(date_list, day_count=365):
 
 
 
-# EXAMPLE Results 
-# MarketEnvironment
-me_gbm = MarketEnvironment('me_gbm', dt.datetime(2020,1,1))
-
-me_gbm.add_constant('initial_value',36)
-me_gbm.add_constant('volatility', 0.1)
-me_gbm.add_constant('final_date', dt.datetime(2020,12,31))
-me_gbm.add_constant('currency', 'EUR')
-me_gbm.add_constant('frequency', 'M')
-me_gbm.add_constant('paths', 10000)
-
-# ConstantShortRate
-csr = ConstantShortRate('csr', 0.05)
-me_gbm.add_curve('discount_curve', csr)
-
-# GeometricBrownian Motion
-gbm = GeometricBrownianMotion('gbm', me_gbm)
-
-gbm.generate_time_grid()
-paths_1 = gbm.get_instrument_values()
-gbm.update(volatility=0.5)
-paths_2 = gbm.get_instrument_values(fixed_seed=False)
-
-
-
 # Plotting
 def plotting(marketE):
     plt.figure(figsize=(12,6))
@@ -234,4 +207,4 @@ def plotting(marketE):
     plt.show()
 
 
-plotting(gbm)
+#plotting(gbm)

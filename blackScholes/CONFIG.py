@@ -5,7 +5,7 @@ expiration = '12-18-2022'
 strike_price = 370
 dataSource = 'yahoo'
 
-desired_sigma = 0.001
+desired_sigma = 0.015
 
 tradingDays = 252
 today = datetime.now()

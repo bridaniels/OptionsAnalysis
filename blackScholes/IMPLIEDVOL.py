@@ -31,3 +31,12 @@ def put_implied_volatility(price, s,k,t,r, sigma=0.001):
             return sigma
         sigma += og_sig
     return "Not Found"
+
+
+callImpliedVol = call_implied_volatility(bs.callOption, bs.lastCloseP, c.strike_price, bs.tMature, bs.riskFree, c.desired_threshold)
+putImpliedVol = put_implied_volatility(bs.callOption, bs.lastCloseP, c.strike_price, bs.tMature, bs.riskFree, c.desired_threshold)
+
+
+print('Desired Volatility: {}'.format(c.desired_threshold))
+print('Call Option - IMPLIEDVOL.py: {}%'.format(100*callImpliedVol))
+print('Put Option - IMPLIEDVOL.py: {}%'.format(100*putImpliedVol))

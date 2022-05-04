@@ -58,8 +58,8 @@ class Underlying(object):
         plt.ylabel('Price (Arbitrary)')
         plt.show()
 
-levels = [1,0,3]
-Under = Underlying(c.stock, bs.lastCloseP, c.strike_price, bs.riskFree, bs.sigma)
-k = Under.makeFullTable(levels)
-Under.plotting(k)
-print(k)
+#levels = [1,0,3]
+#Under = Underlying(c.stock, bs.lastCloseP, c.strike_price, bs.riskFree, bs.sigma)
+#k = Under.makeFullTable(levels)
+#Under.plotting(k)
+#print(k)

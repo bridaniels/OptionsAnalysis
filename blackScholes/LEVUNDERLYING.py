@@ -46,6 +46,8 @@ class Underlying(object):
 
         new_table = Table().with_column("Level of Underlying", np.arange(start,end,step))
         for x in range(len(exp)):
+            if exp[x] == 0:
+                exp[x] = 0.000001
             new_table = new_table.with_column("Time to Expiration of {} Year".format(exp[x]), expireArray(self, exp[x], start,end,step))
         return new_table
 

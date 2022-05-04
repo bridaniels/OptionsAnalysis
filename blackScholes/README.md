@@ -104,6 +104,7 @@
 - [Tokenist: Complete Guide to the Black-Scholes Model](https://tokenist.com/investing/black-scholes-model/)
 - [SoFi: The Black-Scholes Model Explained](https://www.sofi.com/learn/content/what-is-the-black-scholes-model/)
 - [Investopedia: How is Implied Volatility Used in the Black-Scholes Formula](https://www.investopedia.com/ask/answers/060115/how-implied-volatility-used-blackscholes-formula.asp)
+- [Investopedia: Implied Volatility: Buy Low and Sell High](https://www.investopedia.com/articles/optioninvestor/08/implied-volatility.asp)
 
 
 

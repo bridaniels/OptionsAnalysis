@@ -34,7 +34,7 @@ def put_implied_volatility(price, s,k,t,r, sigma=0.001):
 
 
 callImpliedVol = call_implied_volatility(bs.callOption, bs.lastCloseP, c.strike_price, bs.tMature, bs.riskFree, c.desired_threshold)
-putImpliedVol = put_implied_volatility(bs.callOption, bs.lastCloseP, c.strike_price, bs.tMature, bs.riskFree, c.desired_threshold)
+putImpliedVol = put_implied_volatility(bs.putOption, bs.lastCloseP, c.strike_price, bs.tMature, bs.riskFree, c.desired_threshold)
 
 
 print('Desired Volatility: {}'.format(c.desired_threshold))

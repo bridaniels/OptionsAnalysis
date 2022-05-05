@@ -12,7 +12,7 @@ from typing import List
 from pandas_datareader import data as web
 from datetime import datetime, date
 from scipy.stats import norm
-from math import log, sqrt, pi, exp
+from math import pi
 from datascience import *
 from ipywidgets import interact, interactive, fixed, interact_manual
 plt.style.use('fivethirtyeight')
@@ -35,7 +35,7 @@ class Underlying(object):
         end = self.currPrice + (self.currPrice//4)
         step = (self.currPrice/2)//10
 
-        def expireArray(self, expiration, start,end,step):
+        def expireArray(expiration, start,end,step):
             arr = make_array()
             for price in np.arange(start,end,step):
                 if price == 0:

@@ -1,15 +1,18 @@
 # Options Analysis Black Scholes 
+import warnings 
 
 import pandas as pd 
 import numpy as np
+import matplotlib.pyplot as plt 
+import ipywidgets as widgets
 
-from pandas_datareader import data as web 
+from pandas_datareader import data as web
+from requests import TooManyRedirects 
 from scipy.stats import norm
 from math import log, sqrt, pi, exp 
-
+from typing import List 
+from datascience import *
 from datetime import datetime, date
-
-from torch import threshold
 
 from blackScholes.BLACK_SCHOLES import d1
 
@@ -96,28 +99,119 @@ class black_scholes(object):
 
 # GREEKS.py 
 class GREEKS(object):
-    def __init__(self, lastCallP, strike, tMature, riskFree, sigma):
-        self.lastCallP = lastCallP
+    def __init__(self, lastCloseP, strike, tMature, riskFree, sigma, d1=None, d2=None):
+        self.lastCloseP = lastCloseP
         self.strike = strike
         self.tMature = tMature
         self.riskFree = riskFree
         self.sigma = sigma
+        self.d1 = (log(self.lastCloseP/self.strike) + (self.riskFree+self.sigma **2/2) * self.tMature) / (self.sigma * sqrt(self.tMature))
+        self.d2 = (self.d1 - self.sigma * sqrt(self.tMature))
     
     def delta(self, option='call'):
         if option == 'call':
-            call_delta = norm.pdf(black_scholes.prob_d1(self.lastCallP, self.strike, self.tMature, self.riskFree, self.sigma)) / (self.lastCallP*self.sigma * sqrt(self.tMature))
+            call_delta = norm.pdf(self.d1) / (self.lastCloseP * self.sigma * sqrt(self.tMature))
             return call_delta 
         if option == 'put': 
-            put_delta = norm.pdf(black_scholes.prob_d1(self.lastCallP, self.strike, ))
+            put_delta = norm.pdf(self.d1)
             return put_delta
-    def gamma(self):
+    def gamma(self, option='call'):
+        if option == 'call':
+            call_gamma = norm.pdf(self.d1) / (self.lastCloseP * self.sigma * sqrt(self.tMature))
+            return call_gamma
+        if option == 'put':
+            put_gamma = norm.pdf(self.d1) / (self.lastCloseP * self.sigma * sqrt(self.tMature))
+            return put_gamma
+    def vega(self, option='call'):
+        if option == 'call': 
+            call_vega = 0.01 * (self.lastCloseP * norm.pdf(self.d1) * sqrt(self.tMature))
+            return call_vega
+        if option == 'put':
+            put_vega = 0.01 * (self.lastCloseP * norm.pdf(self.d1) * sqrt(self.tMature))
+            return put_vega
+    def theta(self, option='call'):
+        if option == 'call': 
+            call_theta = 0.01 * (-(self.lastCloseP * norm.pdf(self.d1) * self.sigma) / (2 * sqrt(self.tMature)) - self.riskFree*self.strike * exp(-self.riskFree*self.tMature) * norm.cdf(self.d2))
+            return call_theta
+        if option == 'put':
+            put_theta = 0.01 * (-(self.lastCloseP * norm.pdf(self.d1) * self.sigma) / (2 * sqrt(self.tMature)) + self.riskFree*self.strike * exp(-self.riskFree*self.tMature) * norm.cdf(-self.d2))
+            return put_theta
+    def rho(self, option='call'):
+        if option == 'call':
+            call_rho = 0.01 * (self.strike * self.tMature * exp(-self.riskFree*self.tMature) * norm.cdf(self.d2))
+            return call_rho
+        if option == 'put':
+            put_rho = 0.01 * (-self.strike * self.tMature * exp(-self.riskFree*self.tMature) * norm.cdf(-self.d2))
+            return put_rho 
 
 
-    def vega(self):
+# Implied Volatility
+class implied_volatility(object): 
+    def __init__(self, lastCloseP, strike, tMature, riskFree, threshhold, call_put_price, sigma=0.001, d1=None, d2=None): 
+        self.lastCloseP = lastCloseP
+        self.strike = strike
+        self.tMature = tMature
+        self.riskFree = riskFree
+        self.threshhold = threshhold 
+        self.sigma = sigma
+        self.call_put_price = call_put_price
+        self.d1 = (log(self.lastCloseP/self.strike) + (self.riskFree+self.sigma **2/2) * self.tMature) / (self.sigma * sqrt(self.tMature))
+        self.d2 = (self.d1 - self.sigma * sqrt(self.tMature))
+
+    def call_implied_vol(self): 
+        new_sig = self.sigma
+        while new_sig < 1:
+            implied_p = (self.lastCloseP * norm.cdf(self.d1) - self.strike * exp(-self.riskFree*self.tMature) * norm.cdf(self.d2))
+            if self.call_put_price - implied_p < self.sigma: 
+                return new_sig
+            new_sig += self.sigma
+        return 'Not Found'
+
+    def put_implied_vol(self): 
+        new_sig = self.sigma
+        while new_sig < 1:
+            implied_p = (self.strike * exp(-self.riskFree*self.tMature) - self.lastCloseP * self.call_put_price)
+            if self.call_put_price - implied_p < self.sigma: 
+                return new_sig 
+            new_sig += self.sigma
+        return 'Not Found'
 
 
-    def theta(self):
+# LEVEL UNDERLYING
+class Underlying(black_scholes):
+    def __init__(self, stock: str,currPrice: float,strike: int,risk: float,sigma: float,option='call') -> None: 
+        self.stock = stock 
+        self.currPrice = currPrice
+        self.strike = strike
+        self.risk = risk
+        self.sigma = sigma
+        self.option = 'call'
+    
 
+    def makeFullTable(self, exp: List[int]):
+        start = self.currPrice - ((self.currPrice//4)*2)
+        end = self.currPrice + (self.currPrice//4)
+        step = (self.currPrice/2)//10
 
-    def rho(self):
+        def expireArray(expiration, start,end,step):
+            arr = make_array()
+            for price in np.arange(start,end,step):
+                if price == 0:
+                    arr = np.append(arr,0)
+                else: 
+                    arr = np.append(arr, black_scholes(price,self.strike,expiration,self.risk,self.sigma,self.option))
+            return arr
 
+        new_table = Table().with_column("Level of Underlying", np.arange(start,end,step))
+        for x in range(len(exp)):
+            if exp[x] == 0:
+                exp[x] = 0.000001
+            new_table = new_table.with_column("Time to Expiration of {} Year".format(exp[x]), expireArray(self, exp[x], start,end,step))
+        return new_table
+
+    def plotting(self, table):
+        table.plot('Level of Underlying')
+        plt.title("Level of Underlying for {}".format(self.stock))
+        plt.xlabel('Level of Underlying (Arbitrary)')
+        plt.ylabel('Price (Arbitrary)')
+        plt.show()

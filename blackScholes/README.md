@@ -33,12 +33,31 @@
 ![BlackScholesFormula](data/black_scholes_formula.png)
 
 
+---
+---
 
 # **Implied Volatility**
 ---
-- expected future volatility of underlying asset, derived from Black-Scholes formula
+#### Black Scholes: *European Options*
+- expected future volatility of underlying asset
 - assumes price of asset follows geometric Brownian Motion 
-- 
+- used to help analyze potential suppy and demand affects and correlation to future prices of the asset 
+- longer the period to expiration = higher the implied volatility 
+- constantly changing depending on what is going on in the market 
+#### Implied Volatility Factors 
+> - Supply and Demand 
+> - Time to Expiration 
+> - Strike Price 
+> - Historic Volatility 
+> - Interest Rates
+
+#### Binomial Model: *American Options* 
+- Tree Diagram with various levels
+- different execution time at each level to show various exit opportunities within bounds of options contract 
+
+#### Newton's Model: *bisection method, more granular and variable Black-Scholes*
+- combines Black-Scholes method with an equation from Isaac Newton 
+- usually done by traders who can code 
 
 ---
 ---
@@ -102,6 +121,7 @@
 
 ##### Websites: 
 - [Tokenist: Complete Guide to the Black-Scholes Model](https://tokenist.com/investing/black-scholes-model/)
+- [Tokenist: Complete Guide to Implied Volatility](https://tokenist.com/investing/implied-volatility/)
 - [SoFi: The Black-Scholes Model Explained](https://www.sofi.com/learn/content/what-is-the-black-scholes-model/)
 - [Investopedia: How is Implied Volatility Used in the Black-Scholes Formula](https://www.investopedia.com/ask/answers/060115/how-implied-volatility-used-blackscholes-formula.asp)
 - [Investopedia: Implied Volatility: Buy Low and Sell High](https://www.investopedia.com/articles/optioninvestor/08/implied-volatility.asp)

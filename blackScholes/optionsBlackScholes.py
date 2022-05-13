@@ -13,7 +13,6 @@ from math import log, sqrt, pi, exp
 from typing import List 
 from datascience import *
 from datetime import datetime, date
-
 from blackScholes.BLACK_SCHOLES import d1
 
 
@@ -186,7 +185,6 @@ class Underlying(black_scholes):
         self.risk = risk
         self.sigma = sigma
         self.option = 'call'
-    
 
     def makeFullTable(self, exp: List[int]):
         start = self.currPrice - ((self.currPrice//4)*2)

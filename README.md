@@ -1,5 +1,12 @@
 # **Options Trading Analysis Techniques**
 ---
+### Pythonic Methods for Options Pricing Analysis 
+- Black-Scholes Model
+- Binomial Option Pricing Model 
+
+# Getting Started: 
+### Libraries Utilized: 
+`pandas`, `numpy`, `pandas_datareader`, `datetime`, `matplotlib`, `scipy.stats`, `math`, `datascience`, `requests`
 
 # European Option vs. American Option
 ---
@@ -10,6 +17,7 @@
 #### American: 
 > - Binary Option: 
 > - can be exercised whenever within contract 
+> - Binomial Model 
 
 
 

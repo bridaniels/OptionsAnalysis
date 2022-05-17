@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 from statsmodels.graphics.tsaplots import plot_acf
 from pandas_datareader import data as web 
+from arch.__future__ import reindexing
 
 
 
@@ -20,7 +21,7 @@ class VOLATILITY:
         df = web.DataReader(name=self.ticker, data_source='yahoo', start=self.start, end=self.end)
         stock_data = pd.DataFrame(df['Adj Close'])
         stock_data['log'] = np.log(stock_data) - np.log(stock_data.shift(1))
-        data = stock_data['log'].dropna()
+        data = 100 * stock_data['log'].dropna()
         return data
     
     def mean_sigma(self): 

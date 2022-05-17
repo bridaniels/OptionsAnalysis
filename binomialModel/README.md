@@ -42,6 +42,27 @@
 ```
 OptionPriceToday = Option Price - Portfolio Value * e^(-RF * T)
 ``` 
+- `X` = current market price of stock 
+- `X*up` = Upward Movement (`Pup` = Option Payoff)
+- `X*dn` = Downward Movement (`Pdn` = Option Payoff)
+- `t` = Future time
+- `s` = # of shares 
+#### `VUM` = Portfolio Value: Upward Movement 
+```
+VUM = s * X*up - Pup
+```
+#### `VDM` = Portfolio Value: Downward Movement 
+```
+VDM = s * X*dn - Pdn
+```
+#### Number of shares to purchase: 
+``` 
+s = (Pup - Pdn) / ((X * (up-dn))
+```
+#### Present Value: via discounting with risk-free rate 
+```
+PV = e(-rf * t) * [((Pup - Pdn) / (up-dn)) * up - Pup]
+```
 
 # Embedded Options: 
 - pull from investopedia link below 

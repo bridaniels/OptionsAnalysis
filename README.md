@@ -24,7 +24,11 @@
 # Call Option
 ---
 ---
-
+- Short Call: Trader is betting the underlying asset price will drop 
+    - Call Seller to sell security to Call Buyer at strike price when call exercised 
+    - Bearish -> reflecting fall in asset value 
+    - More risk -> less upfront money 
+    - Naked or Covered 
 
 
 
@@ -107,3 +111,5 @@
 ### References: 
 ---
 - [Tokenist: How are Stock Prices Determined?]](https://tokenist.com/investing/how-are-stock-prices-determined/)
+
+- [Investopedia: Short Call](https://www.investopedia.com/terms/s/short-call.asp)

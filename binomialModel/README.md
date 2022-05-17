@@ -1,11 +1,18 @@
 # **Binomial Option Pricing Model**
 ---
+> For each Option Pricing Process One Must Look At:  <br />
+> 1. Specific contract details calculated properly within the model 
+> 2. Optimal volatility modeling varies for different securities (simplest form here) 
+> 3. Assumption that volatility will remain relatively constant during analysis. 
+> 4. Assumption of no arbitrage in the portfolio for these measurements. 
+
 - American-based Options: exercised at any point prior to expiration date 
 - Embedded Options: lets issues/holders take specific actions against other party at a future time 
 - Values Options via Iterative Approach Utilizing Various Nodes Representing Different Periods of Time 
     - Two Possible Outcomes for Each Iteration via **Binomial Tree**
         - Up or Down 
 - Removes Possibility for Arbitrage 
+    - `d<1+r<u` = no arbitrage, value of portfolio that is the return of the option is the price of the option 
 
 > - Use same probability each period for success and failure (up until expiration date)
 >      - can incorporate new information into new probabilities as time passes 

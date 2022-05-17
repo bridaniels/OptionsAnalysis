@@ -1,4 +1,5 @@
 # **Binomial Option Pricing Model**
+---
 - American-based Options: exercised at any point prior to expiration date 
 - Embedded Options: lets issues/holders take specific actions against other party at a future time 
 - Values Options via Iterative Approach Utilizing Various Nodes Representing Different Periods of Time 
@@ -64,6 +65,23 @@ s = (Pup - Pdn) / ((X * (up-dn))
 PV = e(-rf * t) * [((Pup - Pdn) / (up-dn)) * up - Pup]
 ```
 
+---
+# GARCH Process: 
+--- 
+## Generalized Autoregressive Conditional Heteroskedasticity Process 
+#### By Robert F. Engle to estimate volatility in financial markets 
+## Heteroskedascity: 
+- irregular pattern of variation in a variable 
+- standard deviations of variable are nonconstant 
+- observations cluster rather than form linear pattern 
+> Three Steps: <br />
+> 1. estimate best-fitting autoregressive model 
+> 2. compute autocorrelations of error term 
+> 3. test for significance 
+## Autoregressive: 
+- depend on past squared observations and past variances to model current 
+- accounts for errors in prior forecasting 
+
 # Embedded Options: 
 - pull from investopedia link below 
 
@@ -78,3 +96,4 @@ PV = e(-rf * t) * [((Pup - Pdn) / (up-dn)) * up - Pup]
 - [Investopedia: Understanding the Binomial Option Pricing Model](https://www.investopedia.com/articles/investing/021215/examples-understand-binomial-option-pricing-model.asp)
 - [Investopedia: American Option](https://www.investopedia.com/terms/a/americanoption.asp)
 - [Investopedia: Embedded Option](https://www.investopedia.com/terms/e/embeddedoption.asp)
+- [Investopedia: GARCH Process](https://www.investopedia.com/terms/g/generalalizedautogregressiveconditionalheteroskedasticity.asp)

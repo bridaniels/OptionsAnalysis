@@ -96,6 +96,7 @@ PV = e(-rf * t) * [((Pup - Pdn) / (up-dn)) * up - Pup]
 
 
 # References: 
+- [Cox, Ross, Rubinstein, Option Pricing: A Simplified Approach (1979, Jornal of Financial Economics)](https://cpb-us-w2.wpmucdn.com/u.osu.edu/dist/7/36891/files/2017/07/CRR79-1yy8av8.pdf)
 
 
 #### Investopedia: 

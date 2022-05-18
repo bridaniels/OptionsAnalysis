@@ -1,8 +1,10 @@
 # Binomial Model Basics 
 
 # import libraries 
+import os
 import math
 import numpy as np 
+import matplotlib.pyplot as plt 
 
 
 # basic math 
@@ -89,9 +91,10 @@ h_vol = 0.4
 steps = 4 
 odds = 0.5
 rf = 0.05
+option = 'call'
 
 
-def Node_Prices(steps, trading_price, strike, tMature_yr, historic_vol, riskFree): 
+def Node_Prices(steps, trading_price, strike, tMature_yr, historic_vol, riskFree, option='call'): 
     dt = tMature_yr / steps
     #up = np.exp(historic_vol * np.sqrt(dt))
     up = math.exp(historic_vol * math.sqrt(dt))
@@ -110,20 +113,103 @@ def Node_Prices(steps, trading_price, strike, tMature_yr, historic_vol, riskFree
     for k in reversed(range(steps+1)):
         node_price = trading_price * up**k * down**(steps-k)
         node_probability = factorials(steps,k) * prob**k * (1-prob)**(steps-k) 
-        call_value += max(node_price-strike, 0) * node_probability
+        if option == 'call':
+            call_value += max(node_price-strike, 0) * node_probability
+        elif option == 'put': 
+            call_value += max(strike-node_price, 0) * node_probability
+        else: 
+            raise ValueError("option must be 'call' or 'put'")
 
-        print("Node {}: \n Stock Price: ${}\n Option Value: ${}\n Probability: {}\n Call Value: {}".format(k, round(node_price,2), round(max(node_price-strike, 0),2), round(node_probability, 2), round(call_value, 5)))
+        print("Node {}: \n Stock Price: ${}\n Option Value: ${}\n Probability: {}\n Call Value: {}\n".format(k, round(node_price,2), round(max(node_price-strike, 0),2), round(node_probability, 2), round(call_value, 5)))
 
     end_p = call_value * np.exp(-riskFree * tMature_yr)
     print("Ending Price: {}".format(round(end_p,5)))
     
-# Correct up through here 
-dos = Node_Prices(steps, price, strike, t/12, h_vol, rf)
+
+dos = Node_Prices(steps, price, strike, t/12, h_vol, rf, option='call')
+
+
+"""
+Varying Amount of Steps
+=======================
+create list of different step options
+see how price varies 
+- as number of steps increase, price converges
+- same result we would get from closed form Black Scholes 
+"""
+def increase_steps(step_list, trading_price, strike, tMature_yr, historical_val, riskFree, option='call'): 
+    def factorials(steps, k): 
+        return math.factorial(steps) / (math.factorial(steps-k) * math.factorial(k))
+    for n in step_list:
+        dt = tMature_yr/n
+        up = math.exp(historical_val * math.sqrt(dt))
+        down = math.exp(-historical_val * math.sqrt(dt))
+        p = (math.exp(riskFree * dt) - down) / (up-down)
+        call_value = 0
+        for i in range(n+1): 
+            prob = factorials(n,i) * p**i * (1-p)**(n-i)
+            new_price = trading_price * up**i * down**(n-i)
+            if option == 'call': 
+                call_value += max(new_price-strike, 0) * prob
+            elif option == 'put': 
+                call_value += max(strike-new_price, 0) * prob 
+            else: 
+                raise ValueError("option must be 'call' or 'put")
+        print("Price of {} steps is roughtly ${}\n".format(n, round(call_value,2)))
+    
+steplist = [2,4,6,8,10,20,50,60,200,300,400,500,600]
+increase_steps(steplist, price, strike, t/12, h_vol, rf, option='call')
+
+
+"""
+Coin Flipping Option Model 
+===========================
+Heads -> security price goes up 
+    - up approaches 1 from the right 
+Tails -> security price goes down 
+    - down approaches 1 from the left 
+Limit of binomial model as `t -> 0`
+"""
+
+flip =10000
+vol = 0.4
+t = 0.5
+strike = 105
+rf = 0.05
+og_p = 100
+new_paths = 1000
+
+def coin_flipping(flips, volatility, tMaturity, strike, riskFree, og_price, new_paths): 
+    dt = tMaturity/flips 
+    heads = np.exp(volatility * np.sqrt(dt))
+    tails = np.exp(-volatility * np.sqrt(dt))
+    p = (np.exp(riskFree*dt) - tails) / (heads-tails)
+
+    paths = np.random.choice([heads,tails], p=[p,1-p], size=(flips-1))
+    paths2 = np.random.choice([heads,tails], p=[p,1-p], size=(flips,new_paths))
+    
+    plt.figure(figsize=(15,5))
+
+    plt.plot(paths2.cumprod(axis=0) * 100, color='green', alpha=0.06)
+    plt.plot(paths.cumprod(axis=0) * 100, color='black')
+    plt.plot(og_price, label='Last Trading Price: ${}'.format(og_price), marker='*', markersize=10, color='gold')
+    plt.axhline(strike, linewidth=1, linestyle='--', color='darkgreen', alpha=0.7, label="Strike Price")
+    plt.xlabel("Flips", fontsize=12)
+    plt.ylabel("Stock Price (USD)", fontsize=12)
+    plt.legend(loc=2)
+    plt.title("Coin Flip Stock Price Movement Simulation", fontsize=20)
+    plt.savefig('binomialModel/data/coinFlips.png')
+    plt.show()
+    
+coin = coin_flipping(flip, vol, t, strike, rf, og_p, new_paths)
 
 
 
 
 
+# Current 
 # [working link](https://www.codearmo.com/python-tutorial/options-trading-binomial-pricing-model)
+
+
 # [medium article](https://medium.com/engineer-quant/binomial-option-pricing-model-5e6b9e91c7da)
 # [garch in python](https://barnesanalytics.com/garch-models-in-python/)

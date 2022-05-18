@@ -65,9 +65,9 @@ def crr_options(call_num, call_price, share_num, share_price, borrowed, interest
 c1 = 20
 c2 = 25
 c3 = 15
-scenario1 = crr_options(cn, c1, sn, sp, b, ir, up, dn, strike)
-scenario2 = crr_options(cn, c2, sn, sp, b, ir, up, dn, strike)
-scenario3 = crr_options(cn, c3, sn, sp, b, ir, up, dn, strike)
+#scenario1 = crr_options(cn, c1, sn, sp, b, ir, up, dn, strike)
+#scenario2 = crr_options(cn, c2, sn, sp, b, ir, up, dn, strike)
+#scenario3 = crr_options(cn, c3, sn, sp, b, ir, up, dn, strike)
 
 
 '''
@@ -126,7 +126,7 @@ def Node_Prices(steps, trading_price, strike, tMature_yr, historic_vol, riskFree
     print("Ending Price: {}".format(round(end_p,5)))
     
 
-dos = Node_Prices(steps, price, strike, t/12, h_vol, rf, option='call')
+#dos = Node_Prices(steps, price, strike, t/12, h_vol, rf, option='call')
 
 
 """
@@ -158,7 +158,7 @@ def increase_steps(step_list, trading_price, strike, tMature_yr, historical_val,
         print("Price of {} steps is roughtly ${}\n".format(n, round(call_value,2)))
     
 steplist = [2,4,6,8,10,20,50,60,200,300,400,500,600]
-increase_steps(steplist, price, strike, t/12, h_vol, rf, option='call')
+#increase_steps(steplist, price, strike, t/12, h_vol, rf, option='call')
 
 
 """
@@ -201,10 +201,84 @@ def coin_flipping(flips, volatility, tMaturity, strike, riskFree, og_price, new_
     plt.savefig('binomialModel/data/coinFlips.png')
     plt.show()
     
-coin = coin_flipping(flip, vol, t, strike, rf, og_p, new_paths)
+#coin = coin_flipping(flip, vol, t, strike, rf, og_p, new_paths)
 
 
+"""
+Pricing Options on Yahoo Finance
+================================
 
+"""
+
+import math 
+
+import pandas as pd 
+import numpy as np 
+import datetime as dt 
+import matplotlib.pyplot as plt
+
+from pandas_datareader import data as web 
+
+class YahooOptions(): 
+    def __init__(self, ticker, riskFree, historic_vol, steps): 
+        self.ticker = ticker 
+        self.riskFree = riskFree
+        self.historic_vol = historic_vol
+        self.steps = steps
+
+    def factorials(n,i): 
+        return math.factorial(n) / (math.factorial(n-i) * math.factorial(i))
+
+    def binomial_option(self, current_price, strike_price, tMaturity_yr, option='call'): 
+        dt = tMaturity_yr/self.steps 
+        up = math.exp(self.historic_vol * math.sqrt(dt))
+        down = math.exp(-self.historic_vol * math.sqrt(dt))
+        p = (math.exp(self.riskFree * dt) - down) / (up - down) 
+        value = 0 
+        for i in range(self.steps+1): 
+            node_prob = self.factorials(self.steps,i) * p**i * (1-p)**(self.steps-i)
+            new_price = current_price * up**i * down**(self.steps-i)
+            if option == 'call': 
+                value += max(new_price-strike_price, 0) * node_prob
+            elif option == 'put': 
+                value += max(strike_price-new_price, 0) * node_prob
+            else: 
+                raise ValueError("option should = 'call' or 'put'")
+        return value * math.exp(-self.riskFree * tMaturity_yr)
+
+    def get_data(self): 
+        obj = web.YahooOptions(f'{self.ticker}')
+        df = obj.get_all_data()
+        df.reset_index(inplace=True) 
+        df['mid_price'] = (df.Ask + df.Bid) / 2 
+        df['Time'] = (df.Expiry - dt.datetime.now()).dt.days / 255
+        return df[(df.Bid>0) & (df.Ask>0)] 
+
+    def whole_shebang(self, plot=True):
+        df = self.get_data() 
+        prices = []
+        for row in df.itertuples(): 
+            price = self.binomial_option(row.Underlying_Price, row.Strike, row.Time, self.riskFree, self.historic_vol, self.steps, row.Type)
+            prices.append(price) 
+        df['Price'] = prices 
+        df['error'] = df.mid_price - df.Price 
+
+        if plot == True: 
+            exp1 = df[(df.Expiry == df.Expiry.unique()[2]) & (df.Type=='call')]
+            plt.plot(exp1.Strike, exp1.mid_price, label='Mid Price')
+            plt.plot(exp1.Strike, exp1.Price, label='Calculated Price') 
+            plt.xlabel('Strike')
+            plt.ylabel('Call Value')
+            plt.legend(loc=2)
+            plt.show 
+
+
+# pandas datareader not working? 
+yahoo = YahooOptions('TSLA', 0.01, 0.5, 20) 
+#k = yahoo.whole_shebang()
+b = web.YahooOptions('FB')
+for exp in b.expiry_dates:
+    print(exp.isoformat())
 
 
 # Current 
